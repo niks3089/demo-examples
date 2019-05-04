@@ -25,8 +25,8 @@
 #include <net/http/response.hpp>
 
 #include <hal/machine.hpp>
-#include "include/libplatform/libplatform.h"
-#include "include/v8.h"
+#include <libplatform/libplatform.h>
+#include <v8.h>
 
 using namespace std::chrono;
 
@@ -38,6 +38,11 @@ void Service::start()
   std::unique_ptr<v8::Platform> platform = v8::platform::NewDefaultPlatform();
   v8::V8::InitializePlatform(platform.get());
   v8::V8::Initialize();
+
+  // Create a new Isolate and make it the current one.
+  v8::Isolate::CreateParams create_params;
+  create_params.array_buffer_allocator =
+      v8::ArrayBuffer::Allocator::NewDefaultAllocator();
 
   v8::Isolate* isolate = v8::Isolate::New(create_params);
   {

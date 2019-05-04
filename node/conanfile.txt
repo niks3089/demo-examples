@@ -2,7 +2,7 @@
 includeos/[>=0.14.0,include_prerelease=True]@includeos/latest
 
 [build_requires]
-v8/7.5.202@includeos/test
+node/11.14.0@includeos/test
 vmrunner/[>=0.14.0,include_prerelease=True]@includeos/latest
 vmbuild/[>=0.14.0,include_prerelease=True]@includeos/latest
 chainloader/[>=0.14.0,include_prerelease=True]@includeos/latest

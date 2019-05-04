@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.0)
 #Avoid cmake from test compiling to host
 set(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)
 
-project (v8_demo_service)
+project (node_demo_service)
 if (NOT DEFINED CONAN_DEPENDENCIES)
   include(${CMAKE_CURRENT_BINARY_DIR}/conanbuildinfo.cmake OPTIONAL RESULT_VARIABLE HAS_CONAN)
   if (NOT HAS_CONAN)
@@ -18,14 +18,14 @@ set(SOURCES
   service.cpp
 )
 
-os_add_executable(v8_demo "IncludeOS Demo Service" ${SOURCES})
+os_add_executable(node_demo "IncludeOS Demo Service" ${SOURCES})
 
 # DRIVERS / PLUGINS:
 
 if ("$ENV{PLATFORM}" STREQUAL "x86_solo5")
-  os_add_drivers(v8_demo solo5net)
+  os_add_drivers(node_demo solo5net)
 else()
-  os_add_drivers(v8_demo
+  os_add_drivers(node_demo
     virtionet     # Virtio networking
     vmxnet3
     boot_logger   # Display boot information
@@ -35,7 +35,10 @@ else()
   )
 endif()
 
-os_add_stdout(v8_demo default_stdout)
-os_link_libraries(v8_demo v8_libbase v8_libplatform v8_external_snapshot v8_libsampler)
+os_add_stdout(node_demo default_stdout)
+os_link_libraries(node_demo cares gtest v8_nosnapshot
+  v8_libsampler v8_libbase v8_initializers v8_init
+  v8_libplatform v8_base openssl uv zlib nghttp2 icuucx icudata
+  icustubdata icui18n node icutools)
 
 # os_add_plugins( ... )
